@@ -1,0 +1,43 @@
+import requests
+
+# Sample list of valid cities for validation
+VALID_CITIES = [
+    'Chennai', 'Mumbai', 'Delhi', 'Bangalore', 'Kolkata', 
+    'New York', 'Los Angeles', 'London', 'Tokyo', 'Sydney', 
+    'Paris', 'Berlin', 'Dubai', 'Toronto', 'Singapore'
+]
+
+def get_weather_data(city):
+    api_key = '9116b1d81c3bbe27d558ed84602d72f4C'  # Replace with your OpenWeatherMap API key
+    base_url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric'
+    
+    response = requests.get(base_url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        main = data['main']
+        wind = data['wind']
+        weather = data['weather'][0]
+        
+        temperature = main['temp']
+        humidity = main['humidity']
+        pressure = main['pressure']
+        wind_speed = wind['speed']
+        description = weather['description']
+        
+        print(f"Weather in {city}:")
+        print(f"Temperature: {temperature}°C")
+        print(f"Humidity: {humidity}%")
+        print(f"Pressure: {pressure} hPa")
+        print(f"Wind Speed: {wind_speed} m/s")
+        print(f"Description: {description.capitalize()}")
+    else:
+        print("City not found. Please check your input.")
+
+if __name__ == "__main__":
+    city = input("Enter city name: ")
+    if city in VALID_CITIES:
+        get_weather_data(city)
+    else:
+        print("Please enter a valid city name from the list:")
+        print(", ".join(VALID_CITIES))
